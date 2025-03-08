@@ -1,0 +1,231 @@
+
+/* body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    color: #ffffff;
+    background-color:black;
+    line-height: 1.6;
+  } */
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #040710;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+  }
+  
+  .navbar-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar-links li {
+    margin: 0 10px;
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-links a:hover {
+    color: #3bb4a1;
+  }
+  
+  .login-button {
+    padding: 8px 16px;
+    background-color: #3bb4a1;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #2d907e;
+  }
+  
+  
+  .hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #3bb4a1, #2d2d2d);
+  }
+  
+  .hero-content {
+    max-width: 600px;
+    text-align: center;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    margin: 0;
+    color: #ffffff;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+    margin: 20px 0;
+    color: #e0e0e0;
+  }
+  
+  .cta-button {
+    padding: 12px 24px;
+    background-color: #3bb4a1;
+    color: #ffffff;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #2d907e;
+  }
+  
+  .hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+
+  .features-section {
+    padding: 50px 20px;
+    background-color: #2d2d2d;
+    text-align: center;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #3bb4a1;
+  }
+  
+  .features-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .feature-card {
+    background-color: #3d4b6d;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .feature-card img {
+    max-width: 80px;
+    margin-bottom: 15px;
+  }
+  
+
+  .community-section {
+    padding: 50px 20px;
+    background-color: #1f263b;
+    text-align: center;
+  }
+  
+  .community-description {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    color: #e0e0e0;
+  }
+  
+  .community-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat h3 {
+    font-size: 2rem;
+    margin: 0;
+    color: #3bb4a1;
+  }
+  
+  .stat p {
+    margin: 10px 0 0;
+    color: #ffffff;
+  }
+  
+
+  .about-section {
+    padding: 50px 20px;
+    background-color: #3d4b6d;
+    text-align: center;
+  }
+  
+  .about-description {
+    max-width: 600px;
+    margin: 0 auto;
+    color: #e0e0e0;
+  }
+  
+
+  .contact-section {
+    padding: 50px 20px;
+    background-color: #2d2d2d;
+    text-align: center;
+  }
+  
+  .contact-description {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    color: #e0e0e0;
+  }
+  
+  .contact-button {
+    padding: 10px 20px;
+    background-color: #3bb4a1;
+    color: #ffffff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .contact-button:hover {
+    background-color: #2d907e;
+  }
+  
+  .footer {
+    padding: 20px;
+    background-color: #040710;
+    text-align: center;
+    color: #ffffff;
+    font-size: 0.9rem;
+  }
+  

@@ -1,0 +1,120 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+export const SkillListing = () => {
+  const navigate = useNavigate();
+  const { register, handleSubmit, watch } = useForm();
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState({});
+  const selectedCategory = watch("category");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get("/categories");
+        setCategories(res.data.data);
+      } catch (error) {
+        console.error("Error fetching categories", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const fetchSubcategories = async () => {
+        try {
+          const res = await axios.get(`/subcategories?category=${selectedCategory}`);
+          setSubcategories(res.data.data);
+        } catch (error) {
+          console.error("Error fetching subcategories", error);
+        }
+      };
+      fetchSubcategories();
+    }
+  }, [selectedCategory]);
+
+  const submitHandler = async (data) => {
+    try {
+      const loadingToast = toast.info("🔄 Submitting skill listing...", {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+      });
+
+      const res = await axios.post("/skills", data);
+      toast.dismiss(loadingToast);
+
+      if (res.status === 201) {
+        toast.success("🎉 Skill Listed Successfully!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",
+          transition: Bounce,
+        });
+        
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      }
+    } catch (error) {
+      toast.dismiss();
+      toast.error("❌ Failed to list skill. Please try again.", {
+        position: "top-center",
+        autoClose: 4000,
+        theme: "dark",
+      });
+    }
+  };
+
+  return (
+    <div className="signup-container">
+      <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} theme="dark" transition={Bounce} />
+      
+      <div className="signup-card">
+        <h1 style={{ color: "white" }}>ADD SKILL LISTING</h1>
+        <form onSubmit={handleSubmit(submitHandler)}>
+          <div className="form-group">
+            <label>Category</label>
+            <select className="form-input" {...register("category")}>
+              <option value="">Select Category</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat.name}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Subcategory</label>
+            <select className="form-input" {...register("subcategory")}>
+              <option value="">Select Subcategory</option>
+              {subcategories[selectedCategory]?.map((sub) => (
+                <option key={sub._id} value={sub.name}>{sub.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Skill Name</label>
+            <input type="text" className="form-input" {...register("skillName")} placeholder="Enter skill name" />
+          </div>
+          <div className="form-group">
+            <label>Description</label>
+            <textarea className="form-input" {...register("description")} placeholder="Enter description"></textarea>
+          </div>
+          <button type="submit" className="signup-button">Submit</button>
+        </form>
+      </div>
+    </div>
+  );
+};
