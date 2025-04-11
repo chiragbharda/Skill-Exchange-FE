@@ -1,13 +1,16 @@
+/* Fullscreen Centered Container */
 .signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background: linear-gradient(to right, #1e293b, #2563eb);
+  height: 88.5vh; /* Full viewport height */
+  width: 100vw;  /* Full viewport width */
+  background: linear-gradient(135deg, #3bb4a1, #2d2d2d);
   color: white;
+  overflow: hidden; /* Prevent scrolling */
 }
 
+/* Login Card Styling */
 .signup-card {
   background: rgba(30, 41, 59, 0.9);
   padding: 30px;
@@ -16,13 +19,17 @@
   width: 90%;
   max-width: 400px;
   text-align: center;
+  overflow: hidden; /* Prevent content overflow */
 }
 
-.signup-title {
+/* Title */
+.signup-card h1 {
   margin-bottom: 20px;
   font-size: 1.8rem;
+  color: white;
 }
 
+/* Form Styling */
 .form-group {
   text-align: left;
   margin-bottom: 15px;
@@ -44,55 +51,51 @@
   font-size: 1rem;
   background-color: #334155;
   color: white;
+  outline: none; /* Remove input focus outline */
 }
 
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-}
-
-.next-button,
-.back-button,
+/* Submit Button */
 .signup-button {
-  padding: 10px 15px;
+  width: 100%;
+  padding: 12px;
   border: none;
   font-size: 1rem;
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.next-button {
-  background: #38bdf8;
-  color: white;
-}
-
-.next-button:hover {
-  background-color: #0ea5e9;
-}
-
-.back-button {
-  background: #6b7280;
-  color: white;
-}
-
-.back-button:hover {
-  background-color: #4b5563;
-}
-
-.signup-button {
   background: #38bdf8;
   color: white;
 }
 
 .signup-button:hover {
   background-color: #0ea5e9;
+  transform: scale(1.05);
 }
 
+/* Signup & Forgot Password Links */
+.signup-link, .forgot-password {
+  background: none;
+  border: none;
+  color: lightblue;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+
+.signup-link:hover, .forgot-password:hover {
+  color: #0ea5e9;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 600px) {
   .signup-card {
     width: 90%;
+    padding: 20px;
+  }
+
+  .form-input {
+    font-size: 0.9rem;
+    padding: 8px;
   }
 }

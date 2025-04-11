@@ -1,6 +1,19 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const UserNavbar = () => {
+  const navigate = useNavigate();
+ 
+  const handleLogout = ()=>{
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");
+    navigate("/login")
+
+
+
+
+
+  };
   return (
     <nav className="app-header navbar navbar-expand bg-body">
     {/*begin::Container*/}
@@ -26,6 +39,11 @@ const UserNavbar = () => {
           <a href="#" className="nav-link">
             User Dashbord
           </a>
+        </li>
+        <li className="nav-item ">
+          <button className='btn btn-outline-light ms-2' onClick={handleLogout}>
+            <i className='bi bi-person me-1'></i> Logout</button>
+         
         </li>
       </ul>
       {/*end::Start Navbar Links*/}

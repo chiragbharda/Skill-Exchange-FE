@@ -1,77 +1,33 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
-const SkillListing = () => {
-  const [categories, setCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
-
-  const getAllCategories = async () => {
-    const res = await axios.get("/category/getallcategory");
-    console.log(res.data);
-    setCategories(res.data.data);
-  };
-  const getSubCategoryByCategoryId = async (id) => {
-    try {
-      const res = await axios.get(`/category/subcategory/${id}`);
-      console.log("SubCategory response...", res.data);
-      setSubCategories(res.data.data);
-    } catch (error) {
-      console.error("Error fetching subcategories:", error);
-    }
-  };
-  
-
-  useEffect(() => {
-    getAllCategories();
-  }, []);
-
-  const { register, handleSubmit } = useForm();
-
-  const submitHandler = async (data) => {
-    const userId = localStorage.getItem("id");
-    data.userId = userId;
-    const res = await axios.post("/skill/add", data);
-    console.log(res.data);
-  };
+const SkillSelection = () => {
+  const navigate = useNavigate();
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1>Skill Listing</h1>
-      <form onSubmit={handleSubmit(submitHandler)}>
-        <div>
-          <label>Skill Name</label>
-          <input type="text" {...register("skillName")} />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <h1 className="text-2xl font-bold mb-6">What would you like to do?</h1>
+      
+      <div className="flex gap-6">
+      
+        <div 
+          onClick={() => navigate("/offer-skill")} 
+          className="cursor-pointer bg-blue-500 text-white p-6 rounded-lg shadow-md text-center w-64 hover:bg-blue-600"
+        >
+          <h2 className="text-xl font-semibold">Offer a Skill</h2>
+          <p className="text-sm mt-2">Teach others and share your expertise.</p>
         </div>
-        <div>
-          <label>Select Category</label>
-          <select
-            {...register("categoryId")}
-            onChange={(event) => {
-              getSubCategoryByCategoryId(event.target.value);
-            }}
-          >
-            <option>SELECT CATEGORY</option>
-            {categories?.map((category) => {
-              return <option key={category._id} value={category._id}>{category.name}</option>;
-            })}
-          </select>
+
+   
+        <div 
+          onClick={() => navigate("/learn-skill")} 
+          className="cursor-pointer bg-green-500 text-white p-6 rounded-lg shadow-md text-center w-64 hover:bg-green-600"
+        >
+          <h2 className="text-xl font-semibold">Learn a Skill</h2>
+          <p className="text-sm mt-2">Find a mentor and learn something new.</p>
         </div>
-        <div>
-          <label>Select SubCategory</label>
-          <select {...register("subCategoryId")}>
-            <option>SELECT SUBCATEGORY</option>
-            {subCategories?.map((subCategory) => {
-              return <option key={subCategory._id} value={subCategory._id}>{subCategory.name}</option>;
-            })}
-          </select>
-        </div>
-        <div>
-          <input type="submit" value="Submit" />
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
 
-export default SkillListing;
+export default SkillSelection;

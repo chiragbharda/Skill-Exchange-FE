@@ -1,65 +1,48 @@
 import React from "react";
-import "./LandingPage.css";
 import { Link } from "react-router-dom";
+// import Navbar from "../components/common/Navbar"; // Import Navbar
+import "./LandingPage.css";
+import LandingNavbar from "./LandingNavbar";
 
 const LandingPage = () => {
   return (
     <div className="landing-container">
-     
-      <nav className="navbar">
-        <div className="navbar-logo">Skill Exchange</div>
-        <ul className="navbar-links">
-          <li><a href="#features">Features</a></li>
-          <li><a href="#community">Community</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li>
-            <Link to="/login">
+      {/* Navbar Component */}
+      <LandingNavbar />
 
-              <button className="login-button">Login</button>
-            </Link>
-          </li>
-        </ul>
-        
-      </nav>
-
-     
+      {/* Hero Section */}
       <header className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">Unlock Your Potential with Skill Exchange</h1>
           <p className="hero-subtitle">
             Learn, teach, and grow together in a collaborative community.
           </p>
-          <button className="cta-button">Get Started</button>
+          <Link to="/login">
+            <button className="cta-button">Get Started</button>
+          </Link>
         </div>
-        {/* <div className="hero-image">
-          <img src="/assets/images/hero-image.png" alt="Hero" />
-        </div> */}
       </header>
 
-
+      {/* Features Section */}
       <section id="features" className="features-section">
         <h2 className="section-title">Why Choose Skill Exchange?</h2>
         <div className="features-container">
           <div className="feature-card">
-            {/* <img src="/assets/images/expert.png" alt="Learn from Experts" /> */}
             <h3>Learn from Experts</h3>
             <p>Gain insights and practical knowledge from industry professionals.</p>
           </div>
           <div className="feature-card">
-            {/* <img src="/assets/images/share.png" alt="Share Your Skills" /> */}
             <h3>Share Your Skills</h3>
             <p>Teach others and make a meaningful impact in their lives.</p>
           </div>
           <div className="feature-card">
-            {/* <img src="/assets/images/connect.png" alt="Collaborate Globally" /> */}
             <h3>Collaborate Globally</h3>
             <p>Join a global network of learners and mentors.</p>
           </div>
         </div>
       </section>
 
-
+      {/* Community Section */}
       <section id="community" className="community-section">
         <h2 className="section-title">Join Our Vibrant Community</h2>
         <p className="community-description">
@@ -81,7 +64,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-     
+      {/* About Section */}
       <section id="about" className="about-section">
         <h2 className="section-title">About Us</h2>
         <p className="about-description">
@@ -89,7 +72,7 @@ const LandingPage = () => {
         </p>
       </section>
 
-  
+      {/* Contact Section */}
       <section id="contact" className="contact-section">
         <h2 className="section-title">Get in Touch</h2>
         <p className="contact-description">
@@ -98,8 +81,9 @@ const LandingPage = () => {
         <button className="contact-button">Contact Us</button>
       </section>
 
+      {/* Footer */}
       <footer className="footer">
-        <p>&copy; 2025 Skill Exchange. All rights reserved.</p>
+        <p>&copy; 2025 Skill Exchange. All rights reserved by Chirag Bharda.</p>
       </footer>
     </div>
   );
