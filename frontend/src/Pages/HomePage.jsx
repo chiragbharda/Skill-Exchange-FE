@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Typography, Button, Box, Grid, Card, Avatar } from "@mui/material";
+import { Container, Typography, Button, Box, Grid, Card, Avatar, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import { Bounce, ToastContainer } from "react-toastify";
-import { LocationOn, Mail, Phone, Verified } from "@mui/icons-material";
+import { LocationOn, Mail, Phone, Verified,  } from "@mui/icons-material";
 import { Chip } from "@mui/material"; // ✔ correct
 
 import { useEffect } from "react";
@@ -17,6 +17,8 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [details, setdetails] = useState([])
   const loggedInUserId = localStorage.getItem("id");
+  const [selectedSkill, setSelectedSkill] = useState("");
+ const [allSkills, setAllSkills] = useState([]);
 
 
 
@@ -24,7 +26,16 @@ const HomePage = () => {
     try {
       const res = await axios.get("/allskill");
       // console.log(res.data.data)
-      setdetails(res.data.data);
+      const data = res.data.data
+      setdetails(data);
+
+      const skills = Array.from(
+        new Set(
+          data.flatMap((item) => item.proficientSkills || [])
+        )
+      );
+      setAllSkills(skills);
+
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -34,7 +45,8 @@ const HomePage = () => {
   }, [])
 
   return (
-    <Box sx={{ bgcolor: "#f4f4f4", minHeight: "100vh" }}>
+    <Box sx={{ bgcolor: "#f4f4f4", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+
       <Navbar />
       <ToastContainer
         position="top-center"
@@ -48,7 +60,7 @@ const HomePage = () => {
         theme="dark"
         transition={Bounce}
       />
-
+      <Box sx={{ flexGrow: 1 }}>
       {/* Hero Section */}
       <Container sx={{ textAlign: "center", paddingTop: 8 }}>
         <Typography variant="h3" fontWeight="bold" gutterBottom>
@@ -59,17 +71,42 @@ const HomePage = () => {
         </Typography>
       </Container>
 
+      <Container sx={{ mt: 4 }}>
+        <FormControl fullWidth sx={{ maxWidth: 300, margin: "auto" }}>
+          <InputLabel>Filter by Skill</InputLabel>
+          <Select
+            value={selectedSkill}
+            label="Filter by Skill"
+            onChange={(e) => setSelectedSkill(e.target.value)}
+          >
+            
+            <MenuItem value="">All Skills</MenuItem>
+            {allSkills.map((skill, idx) => (
+              <MenuItem key={idx} value={skill}>
+                {skill}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Container>
+
+
 
       {/* profile card */}
-      {/* <Container sx={{ mt: 6 }} > */}
+      <Container sx={{ mt: 6 }} >
         <Grid container spacing={3} justifyContent="center" sx={{ mt: 6 }}>
           {details
-            .filter((detail) => detail.userId._id !== localStorage.getItem("id"))
+            .filter((detail) => detail.userId._id !== loggedInUserId)
+            .filter((detail) =>
+              selectedSkill === "" || (detail.proficientSkills || []).includes(selectedSkill)
+            )
             .map((detail) => (
+
+
 
               <Grid item xs={12} sm={6} md={4} key={detail.id} sx={{ display: "flex" }}>
                 <Card
-                   sx={{
+                  sx={{
                     p: 3,
                     width: "100%",
                     height: "100%",
@@ -86,43 +123,43 @@ const HomePage = () => {
                   }}
                 >
                   <Box sx={{ flexGrow: 1 }}>
-                  <Avatar
-                    src="https://via.placeholder.com/100"
-                    sx={{ width: 90, height: 90, margin: "auto", border: "3px solid #3498DB" }}
-                  />
+                    <Avatar
+                      src="https://via.placeholder.com/100"
+                      sx={{ width: 90, height: 90, margin: "auto", border: "3px solid #3498DB" }}
+                    />
 
-                  <Typography variant="h6" sx={{ fontWeight: "bold", mt: 2 }}>
-                    {detail.userId.full_name || "User Name"} <Verified sx={{ color: "#3498DB", fontSize: 18 }} />
-                  </Typography>
-
-                  <Typography variant="body2" sx={{ color: "#555", mt: 1 }}>
-                    <Mail sx={{ fontSize: 16, verticalAlign: "middle", color: "#3498DB" }} /> {detail.userId.email}
-                  </Typography>
-
-                  <Typography variant="body2" sx={{ color: "#555", mt: 0.5 }}>
-                    <Phone sx={{ fontSize: 16, verticalAlign: "middle", color: "#27AE60" }} /> {detail.userId.phone}
-                  </Typography>
-
-
-                  {/* Proficient Skills */}
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="body2" sx={{ color: "#555", fontWeight: 500 }}>
-                      <Verified sx={{ fontSize: 18, verticalAlign: "middle", color: "#27AE60", mr: 1 }} />
-                      Proficient Skills:
+                    <Typography variant="h6" sx={{ fontWeight: "bold", mt: 2 }}>
+                      {detail.userId.full_name || "User Name"} <Verified sx={{ color: "#3498DB", fontSize: 18 }} />
                     </Typography>
 
-                    <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1, justifyContent: "center" }}>
-                      {detail.proficientSkills?.slice(0, 3).map((skill, index) => (
-                        <Chip
-                          key={index}
-                          label={skill}
-                          color="primary"
-                          variant="outlined"
-                          icon={<Verified sx={{ fontSize: 18 }} />}
-                        />
-                      ))}
+                    <Typography variant="body2" sx={{ color: "#555", mt: 1 }}>
+                      <Mail sx={{ fontSize: 16, verticalAlign: "middle", color: "#3498DB" }} /> {detail.userId.email}
+                    </Typography>
+
+                    <Typography variant="body2" sx={{ color: "#555", mt: 0.5 }}>
+                      <Phone sx={{ fontSize: 16, verticalAlign: "middle", color: "#27AE60" }} /> {detail.userId.phone}
+                    </Typography>
+
+
+                    {/* Proficient Skills */}
+                    <Box sx={{ mt: 2 }}>
+                      <Typography variant="body2" sx={{ color: "#555", fontWeight: 500 }}>
+                        <Verified sx={{ fontSize: 18, verticalAlign: "middle", color: "#27AE60", mr: 1 }} />
+                        Proficient Skills:
+                      </Typography>
+
+                      <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1, justifyContent: "center" }}>
+                        {detail.proficientSkills?.slice(0, 3).map((skill, index) => (
+                          <Chip
+                            key={index}
+                            label={skill}
+                            color="primary"
+                            variant="outlined"
+                            icon={<Verified sx={{ fontSize: 18 }} />}
+                          />
+                        ))}
+                      </Box>
                     </Box>
-                  </Box>
                   </Box>
                   {/* Buttons */}
                   <Grid container spacing={1} sx={{ mt: 2 }} justifyContent="center">
@@ -145,9 +182,9 @@ const HomePage = () => {
               </Grid>
             ))}
         </Grid>
-      {/* </Container> */}
+      </Container>
 
-
+      </Box>
       {/* Movable Sections (Swiper Slider) */}
       <Container sx={{ marginTop: 10, mb: 6 }}>
         <Swiper

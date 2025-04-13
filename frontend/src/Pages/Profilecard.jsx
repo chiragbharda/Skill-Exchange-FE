@@ -29,7 +29,7 @@ const Profile = () => {
   const fetchProfile = async () => {
     try {
       const res = await axios.get(`/skill/${userId}`);
-    //   console.log(res.data.data)
+      // console.log(res.data.data[0].userId._id)
       if (res.data.data.length > 0) {
         setProfile(res.data.data[0]);
       } else {
@@ -116,7 +116,6 @@ const Profile = () => {
             <Grid item xs={12} md={9}>
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                 {profile.userId.full_name || "User Name"}{" "}
-                <Verified sx={{ color: "#FFD700", fontSize: 22 }} />
               </Typography>
               <Typography variant="body2" sx={{ color: "#e0e0e0", mt: 1 }}>
                 <Mail sx={{ fontSize: 16, verticalAlign: "middle" }} />{" "}
@@ -151,7 +150,7 @@ const Profile = () => {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={() => navigate(`/review/:userId`)}
+                    onClick={() => navigate(`/review/${profile.userId._id}`)}
                   >
                     Rate
                   </Button>

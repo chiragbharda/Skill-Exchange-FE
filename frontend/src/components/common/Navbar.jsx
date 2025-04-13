@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
   Typography,
-  InputBase,
   Box,
   IconButton,
   Avatar,
@@ -15,17 +14,15 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Badge,
 } from "@mui/material";
 import {
   Home,
-  Groups,
-  AccountCircle,
-  Dashboard,
-  Logout,
-  Explore,
-  Menu as MenuIcon,
-  Search,
-  Chat,
+ AccountCircle,
+ Logout,
+Menu as MenuIcon,
+Chat,
+NotificationAdd,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -36,13 +33,15 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [notificationCount, setNotificationCount] = useState(0);
+
 
   const getActiveTab = () => {
     if (location.pathname.includes("/homepage")) return 0;
-    if (location.pathname.includes("/dashboard2")) return 1;
-    if (location.pathname.includes("/notifiaction")) return 2;
-    if (location.pathname.includes("/chat")) return 3;
-    if (location.pathname.includes("/profile")) return 4;
+    // if (location.pathname.includes("/dashboard2")) return 1;
+    if (location.pathname.includes("/notifiaction")) return 1;
+    if (location.pathname.includes("/chat")) return 2;
+    if (location.pathname.includes("/profile")) return 3;
     return null;
   };
 
@@ -62,14 +61,38 @@ const Navbar = () => {
       console.error("Search error:", error);
     }
   };
+  useEffect(() => {
+    const fetchNotificationCount = async () => {
+      try {
+        const userId = localStorage.getItem("id"); // or use getLoggedUserId()
+        const res = await axios.get(`/api/notifications/${userId}`);
+        const unread = res.data.filter(n => !n.isRead).length;
+        setNotificationCount(unread);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotificationCount();
+  }, []);
+
 
   const handleProfileClick = (event) => setAnchorEl(event.currentTarget);
   const handleCloseMenu = () => setAnchorEl(null);
 
   const tabItems = [
     { label: "Home", icon: <Home />, path: "/homepage" },
-    { label: "Dashboard", icon: <Dashboard />, path: "/dashboard2" },
-    { label: "Explore", icon: <Explore />, path: "/explore/chirag" },
+    // { label: "Dashboard", icon: <Dashboard />, path: "/dashboard2" },
+    {
+      label: "Notification",
+      icon: (
+        <Badge badgeContent={notificationCount} color="error">
+          <NotificationAdd />
+        </Badge>
+      ),
+      path: "/notification",
+    },
+    ,
     { label: "Chat", icon: <Chat />, path: "/chat" },
   ];
 
@@ -88,7 +111,7 @@ const Navbar = () => {
           </Typography>
 
           {/* Search Bar */}
-          <Box sx={{ position: "relative", bgcolor: "white", borderRadius: 1, paddingX: 2, display: { xs: "none", sm: "block" } }}>
+          {/* <Box sx={{ position: "relative", bgcolor: "white", borderRadius: 1, paddingX: 2, display: { xs: "none", sm: "block" } }}>
             <InputBase
               placeholder="Search Skills"
               sx={{ width: "200px" }}
@@ -98,7 +121,7 @@ const Navbar = () => {
             <button onClick={searchSkill}>
               <Search sx={{ position: "absolute", right: 10, top: 6, color: "gray" }} />
             </button>
-          </Box>
+          </Box> */}
 
           {/* Desktop Navigation Buttons */}
           <Box sx={{ display: { xs: "none", md: "flex" }, marginLeft: 3 }}>
@@ -168,4 +191,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
- 

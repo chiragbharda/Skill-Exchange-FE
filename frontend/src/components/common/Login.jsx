@@ -47,7 +47,7 @@ export const Login = () => {
             navigate("/addskill");
           }
           if (res.data.data.roleId.role === "Admin") {
-            navigate("/admin")
+            navigate("/ahomepage")
           }
         }, 1000);
       }

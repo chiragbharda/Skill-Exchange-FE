@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import Navbar from "../components/common/Navbar"; // Import Navbar
 import "./LandingPage.css";
 import LandingNavbar from "./LandingNavbar";
 
@@ -43,7 +42,7 @@ const LandingPage = () => {
       </section>
 
       {/* Community Section */}
-      <section id="community" className="community-section">
+      {/* <section id="community" className="community-section">
         <h2 className="section-title">Join Our Vibrant Community</h2>
         <p className="community-description">
           At Skill Exchange, we bring people together to learn, share, and innovate.
@@ -62,7 +61,7 @@ const LandingPage = () => {
             <p>Connections Made</p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* About Section */}
       <section id="about" className="about-section">

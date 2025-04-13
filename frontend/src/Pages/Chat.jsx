@@ -25,17 +25,17 @@ const ChatPage = () => {
 
   const userId = localStorage.getItem("id");
 
-  // Fetch connected users
+
   const fetchChats = async () => {
     try {
       const res = await axios.get("/users");
       // console.log(res.data.data)
       const allUsers = res.data.data;
   
-      // Find logged-in user
+      
       const loggedInUser = allUsers.find((user) => user._id === userId);
   
-      // Map connected users
+      
       if (loggedInUser) {
         const connected = allUsers.filter((user) =>
           loggedInUser.connectedUsers.includes(user._id)
@@ -48,7 +48,7 @@ const ChatPage = () => {
   };
   
 
-  // Fetch pending requests
+ 
   const fetchRequests = async () => {
     try {
       const res = await axios.get(`/received/${userId}`);
@@ -129,7 +129,7 @@ const ChatPage = () => {
 
           <Divider sx={{ my: 2, borderColor: "#444" }} />
 
-          {/* Chat History Tab */}
+          {/* Chat History  */}
           {tab === 0 && (
             <List>
               {chatUsers.map((user) => (
@@ -176,7 +176,7 @@ const ChatPage = () => {
 
         </Box>
 
-        {/* Chat Section */}
+        {/* Chat */}
         <Box
           flex={1}
           bgcolor="#fff"

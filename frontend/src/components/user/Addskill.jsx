@@ -14,7 +14,82 @@ import {
 import { DatePicker } from "@mui/lab";
 import axios from "axios";
 
-const skillOptions = ["React", "Node.js", "Express", "MongoDB", "Flask", "JPA", "Clustering"];
+const skillOptions = ["React", "Node.js", "Express", "MongoDB", "Flask", "JPA", "Clustering", "Python",
+  "Java",
+  "C++",
+  "C#",
+  "JavaScript",
+  "HTML",
+  "CSS",
+  "Angular",
+  "Vue",
+  
+  "SQL",
+  "NoSQL",
+  "Django",
+  
+  "Spring",
+  "Hibernate",
+ 
+  "JSP",
+  "Servlets",
+  "JDBC",
+  "Swing",
+  "JavaFX",
+  "Android Development",
+  "iOS",
+  "Swift",
+  "Kotlin",
+  "Objective-C",
+  "React Native",
+  "Flutter",
+  "Xamarin",
+  "Unity",
+  "Unreal Engine",
+  "Cocos2d",
+  "Phaser",
+  "HTML5",
+  "CSS3",
+  "Bootstrap",
+  "Sass",
+  "Less",
+  "Materialize",
+  "Bulma",
+  "Foundation",
+  "jQuery",
+  "Ajax",
+  "TypeScript",
+  "WebAssembly",
+  "WebRTC",
+  "WebSockets",
+  "Socket.IO",
+  "GraphQL",
+  "REST",
+  "SOAP",
+  "OAuth",
+  "JWT",
+  "Firebase",
+  "AWS",
+  "Azure",
+  "Google Cloud",
+  "Heroku",
+  "Netlify",
+  "Vercel",
+  "Docker",
+  "Kubernetes",
+  "Jenkins",
+  "Travis CI",
+  "CircleCI",
+  "Git",
+  "GitHub",
+  "GitLab",
+  "Bitbucket",
+  "Jira",
+  "Trello",
+  "Asana",
+  "Natural Language Processing",
+  "Deep Learning",
+  "PyTorch",];
 
 const AddSkill = () => {
   const navigate = useNavigate(); // Initialize navigation
@@ -57,7 +132,7 @@ const AddSkill = () => {
   };
 
   const handleSubmit = async () => {
-    
+
     if (skillsToLearn.length === 0) {
       alert("Please add at least one skill to submit form'");
       return;

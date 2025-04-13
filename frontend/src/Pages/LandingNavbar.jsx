@@ -19,14 +19,12 @@ const LandingNavbar = () => {
 
         </Typography>
 
-        {/* Navigation Links */}
+       
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
           <Button component="a" href="#features" sx={{ color: "white", fontWeight: "bold" }}>
             Features
           </Button>
-          <Button component="a" href="#community" sx={{ color: "white", fontWeight: "bold" }}>
-            Community
-          </Button>
+          
           <Button component="a" href="#about" sx={{ color: "white", fontWeight: "bold" }}>
             About
           </Button>
@@ -35,7 +33,7 @@ const LandingNavbar = () => {
           </Button>
         </Box>
 
-        {/* Login Button */}
+       
         <Link to="/login">
           <Button variant="contained" color="primary">
             Login

@@ -23,13 +23,16 @@ const AdminNavbar = () => {
         <Typography variant="h7" sx={{ flexGrow: 8 }}>
           Admin Panel
         </Typography>
-        <Button color="inherit" onClick={() => navigate("/admin/dashboard")}>
-          Dashboard
+        <Button color="inherit" onClick={() => navigate("/ahomepage")}>
+          dashbord
         </Button>
-        <Button color="inherit" onClick={() => navigate("/admin/users")}>
+        <Button color="inherit" onClick={() => navigate("/admin/dashboard")}>
+          Allusers
+        </Button>
+        <Button color="inherit" onClick={() => navigate("/allusers")}>
           Users profile
         </Button>
-        <Button color="inherit" onClick={() => navigate("/admin/reports")}>
+        <Button color="inherit" onClick={() => navigate("/allreport")}>
           Reports
         </Button>
         <Button variant="outlined" color="error" onClick={handleLogout}>

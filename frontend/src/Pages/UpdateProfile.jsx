@@ -11,16 +11,13 @@ import {
 import axios from "axios";
 import Navbar from "../components/common/Navbar";
 
-
 const UpdateProfile = () => {
   const userId = localStorage.getItem("id");
- 
 
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
     phone: "",
-    specification: "",
     linkedin: "",
     github: "",
     portfolio: "",
@@ -37,15 +34,17 @@ const UpdateProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`/skill/${userId}`);
-        const skillData = res.data.data[0];
-        console.log(res.data.data[0])
+        const userRes = await axios.get(`/user/${userId}`);
+        const skillRes = await axios.get(`/skill/${userId}`);
+
+        const userData = userRes.data;
+        const skillData = skillRes.data.data[0];
+        console.log(skillData)
 
         setFormData({
-          full_name: skillData.userId?.full_name || "",
-          email: skillData.userId?.email || "",
-          phone: skillData.userId?.phone || "",
-        //   specification: skillData.userId?.specification || "",
+          full_name: skillData.userId.full_name || "",
+          email: skillData.userId.email || "",
+          phone: skillData.userId.phone || "",
           linkedin: skillData.linkedin || "",
           github: skillData.github || "",
           portfolio: skillData.portfolio || "",
@@ -56,7 +55,7 @@ const UpdateProfile = () => {
           endDate: skillData.education?.endDate?.substring(0, 10) || "",
         });
 
-        setPreview(skillData.userId?.profilePic || null);
+        setPreview(userData.profile_image || null);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
@@ -76,20 +75,38 @@ const UpdateProfile = () => {
   };
 
   const handleUpdate = async () => {
-    const data = new FormData();
-    Object.keys(formData).forEach((key) => data.append(key, formData[key]));
-    if (profilePic) data.append("profilePic", profilePic);
-
     try {
-      await axios.put(`/user/update/${userId}`, data, {
+      // Update User
+      const userData = new FormData();
+      userData.append("full_name", formData.full_name);
+      userData.append("phone", formData.phone);
+      if (profilePic) userData.append("profile_image", profilePic);
+
+      await axios.put(`/user/update`, userData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      // Update Skills
+      const skillData = {
+        linkedin: formData.linkedin,
+        github: formData.github,
+        portfolio: formData.portfolio,
+        education: {
+          institution: formData.institution,
+          degree: formData.degree,
+          grade: formData.grade,
+          
+        },
+      };
+
+      await axios.put(`/skill/update/${userId}`, skillData);
+
       alert("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Update failed.");
+      alert("Update failed. Please try again.");
     }
   };
 
@@ -120,15 +137,7 @@ const UpdateProfile = () => {
             </Grid>
 
             {/* Basic Info */}
-            {[
-              "full_name",
-              "email",
-              "phone",
-            //   "specification",
-              "linkedin",
-              "github",
-              "portfolio",
-            ].map((field) => (
+            {["full_name", "email", "phone", "linkedin", "github", "portfolio"].map((field) => (
               <Grid item xs={12} key={field}>
                 <TextField
                   label={field.replace(/_/g, " ").toUpperCase()}
@@ -159,7 +168,7 @@ const UpdateProfile = () => {
               </Grid>
             ))}
 
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextField
                 label="START DATE"
                 name="startDate"
@@ -169,9 +178,9 @@ const UpdateProfile = () => {
                 fullWidth
                 InputLabelProps={{ shrink: true }}
               />
-            </Grid>
+            </Grid> */}
 
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextField
                 label="END DATE"
                 name="endDate"
@@ -181,7 +190,7 @@ const UpdateProfile = () => {
                 fullWidth
                 InputLabelProps={{ shrink: true }}
               />
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12}>
               <Button
