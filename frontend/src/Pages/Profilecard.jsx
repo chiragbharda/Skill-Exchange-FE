@@ -10,33 +10,36 @@ import {
   Avatar,
   Button,
   Box,
+  Alert,
 } from "@mui/material";
-import { Verified, Mail, Phone, LocationOn } from "@mui/icons-material";
+import { Mail, Phone, LocationOn } from "@mui/icons-material";
 import axios from "axios";
 import Navbar from "../components/common/Navbar";
 import { useParams, useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const {userId} = useParams();
+  const { userId } = useParams();
   const loggedInUserId = localStorage.getItem("id");
-//   console.log(userId)
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [connectLoading, setConnectLoading] = useState(false);
 
   const fetchProfile = async () => {
+    setLoading(true);
+    setError(false);
     try {
       const res = await axios.get(`/skill/${userId}`);
-      // console.log(res.data.data[0].userId._id)
       if (res.data.data.length > 0) {
         setProfile(res.data.data[0]);
       } else {
         setProfile(null);
       }
-    } catch (error) {
-      console.error("Error fetching skill profile:", error);
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -50,37 +53,53 @@ const Profile = () => {
     try {
       setConnectLoading(true);
   
-      const senderId = localStorage.getItem("id"); // logged-in user
-      const receiverId = profile?.userId?._id;     // viewed user
+      const senderId = localStorage.getItem("id");
+      const receiverId = profile?.userId?._id;
   
-      // Log to check
+      // Debugging IDs
       console.log("Sender ID:", senderId);
       console.log("Receiver ID:", receiverId);
   
-      if (!senderId || !receiverId || senderId.length !== 24 || receiverId.length !== 24) {
-        alert("Invalid user ID format");
+      if (!senderId || !receiverId) {
+        alert("Sender or Receiver ID is missing.");
         return;
       }
   
-      const { data } = await axios.post("/request/create", {
+      const response = await axios.post("/request/create", {
         senderId,
         receiverId,
       });
   
-      toast.success(data.message);
+      alert(response.data.message);
     } catch (error) {
-      toast.error("Failed to send connection request.");
-      console.error("Connection error:", error);
+      console.error("Error connecting:", error);
+      alert("Connection failed. Please check the details and try again.");
     } finally {
       setConnectLoading(false);
     }
   };
   
 
-  if (loading || !profile) {
+  if (loading) {
     return (
       <Typography sx={{ textAlign: "center", mt: 4 }}>
         <CircularProgress />
+      </Typography>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error" sx={{ textAlign: "center", mt: 4 }}>
+        Unable to fetch profile. Please try again later.
+      </Alert>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <Typography sx={{ textAlign: "center", mt: 4 }}>
+        Profile not found.
       </Typography>
     );
   }
@@ -104,7 +123,7 @@ const Profile = () => {
           <Grid container alignItems="center">
             <Grid item xs={12} md={3} textAlign="center">
               <Avatar
-                src={profile.userId.profile_image}
+                src={profile?.userId?.profile_image}
                 sx={{
                   width: 110,
                   height: 110,
@@ -115,19 +134,19 @@ const Profile = () => {
             </Grid>
             <Grid item xs={12} md={9}>
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                {profile.userId.full_name || "User Name"}{" "}
+                {profile?.userId?.full_name || "User Name"}
               </Typography>
               <Typography variant="body2" sx={{ color: "#e0e0e0", mt: 1 }}>
                 <Mail sx={{ fontSize: 16, verticalAlign: "middle" }} />{" "}
-                {profile.userId.email}
+                {profile?.userId?.email || "N/A"}
               </Typography>
               <Typography variant="body2" sx={{ color: "#e0e0e0", mt: 0.5 }}>
                 <Phone sx={{ fontSize: 16, verticalAlign: "middle" }} />{" "}
-                {profile.userId.phone}
+                {profile?.userId?.phone || "N/A"}
               </Typography>
               <Typography variant="body2" sx={{ color: "#e0e0e0", mt: 0.5 }}>
                 <LocationOn sx={{ fontSize: 16, verticalAlign: "middle" }} />{" "}
-                {profile.userId.specification || "N/A"}
+                {profile?.userId?.specification || "N/A"}
               </Typography>
 
               {!isOwnProfile && (
@@ -161,28 +180,28 @@ const Profile = () => {
         </Card>
 
         <Card sx={{ p: 3, mb: 3, borderRadius: 3 }}>
-          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-            {profile.userId.email || "User Email"}
-          </Typography>
-
           <Typography sx={{ mt: 1 }}>
-            <Link href={profile.linkedin} target="_blank" rel="noopener">
-              LinkedIn
-            </Link>{" "}
-            |{" "}
-            <Link href={profile.github} target="_blank" rel="noopener">
-              GitHub
-            </Link>{" "}
-            |{" "}
-            <Link href={profile.portfolio} target="_blank" rel="noopener">
-              Portfolio
-            </Link>
+            {profile?.linkedin && (
+              <Link href={profile.linkedin} target="_blank" rel="noopener">
+                LinkedIn
+              </Link>
+            )}
+            {profile?.github && (
+              <Link href={profile.github} target="_blank" rel="noopener">
+                GitHub
+              </Link>
+            )}
+            {profile?.portfolio && (
+              <Link href={profile.portfolio} target="_blank" rel="noopener">
+                Portfolio
+              </Link>
+            )}
           </Typography>
 
           <Typography variant="h6" sx={{ mt: 2 }}>
             Proficient Skills
           </Typography>
-          {profile.proficientSkills.length > 0 ? (
+          {profile?.proficientSkills?.length > 0 ? (
             profile.proficientSkills.map((skill, index) => (
               <Chip key={index} label={skill} sx={{ m: 0.5 }} />
             ))
@@ -193,14 +212,9 @@ const Profile = () => {
           <Typography variant="h6" sx={{ mt: 2 }}>
             Skills to Learn
           </Typography>
-          {profile.skillsToLearn.length > 0 ? (
+          {profile?.skillsToLearn?.length > 0 ? (
             profile.skillsToLearn.map((skill, index) => (
-              <Chip
-                key={index}
-                label={skill}
-                color="secondary"
-                sx={{ m: 0.5 }}
-              />
+              <Chip key={index} label={skill} color="secondary" sx={{ m: 0.5 }} />
             ))
           ) : (
             <Typography variant="body2">No skills to learn added.</Typography>
@@ -209,7 +223,7 @@ const Profile = () => {
           <Typography variant="h6" sx={{ mt: 2 }}>
             Education
           </Typography>
-          {profile.education ? (
+          {profile?.education ? (
             <>
               <Typography variant="body2">
                 {profile.education.institution}

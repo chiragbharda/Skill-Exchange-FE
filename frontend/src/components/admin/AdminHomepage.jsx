@@ -90,10 +90,11 @@ const AdminDashboard = () => {
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={chartData}>
                     <XAxis dataKey="name" />
-                    <YAxis />
+                    <YAxis allowDecimals={false} />
                     <Tooltip />
                     <Bar dataKey="value" fill="#8884d8" barSize={50} />
                   </BarChart>
+
                 </ResponsiveContainer>
               </CardContent>
             </Card>
