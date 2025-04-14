@@ -25,7 +25,6 @@ const HomePage = () => {
   const getDetails = async () => {
     try {
       const res = await axios.get("/allskill");
-      // console.log(res.data.data)
       const data = res.data.data
       setdetails(data);
 
@@ -124,7 +123,7 @@ const HomePage = () => {
                 >
                   <Box sx={{ flexGrow: 1 }}>
                     <Avatar
-                      src="https://via.placeholder.com/100"
+                      src={detail.userId.profile_image}
                       sx={{ width: 90, height: 90, margin: "auto", border: "3px solid #3498DB" }}
                     />
 

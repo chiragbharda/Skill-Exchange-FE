@@ -67,10 +67,10 @@ const Profile = () => {
         receiverId,
       });
   
-      alert(data.message);
+      toast.success(data.message);
     } catch (error) {
+      toast.error("Failed to send connection request.");
       console.error("Connection error:", error);
-      alert("Connection failed");
     } finally {
       setConnectLoading(false);
     }
@@ -104,7 +104,7 @@ const Profile = () => {
           <Grid container alignItems="center">
             <Grid item xs={12} md={3} textAlign="center">
               <Avatar
-                src="https://via.placeholder.com/100"
+                src={profile.userId.profile_image}
                 sx={{
                   width: 110,
                   height: 110,

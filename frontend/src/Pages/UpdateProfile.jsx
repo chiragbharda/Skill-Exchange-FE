@@ -40,6 +40,7 @@ const UpdateProfile = () => {
         const userData = userRes.data;
         const skillData = skillRes.data.data[0];
         console.log(skillData)
+      
 
         setFormData({
           full_name: skillData.userId.full_name || "",
@@ -76,39 +77,35 @@ const UpdateProfile = () => {
 
   const handleUpdate = async () => {
     try {
-      // Update User
       const userData = new FormData();
       userData.append("full_name", formData.full_name);
       userData.append("phone", formData.phone);
-      if (profilePic) userData.append("profile_image", profilePic);
-
-      await axios.put(`/user/update`, userData, {
+      if (profilePic) userData.append("profile_image", profilePic); // Handle profile image upload
+  
+      // Append skill data
+      userData.append("linkedin", formData.linkedin);
+      userData.append("github", formData.github);
+      userData.append("portfolio", formData.portfolio);
+      userData.append("institution", formData.institution);
+      userData.append("degree", formData.degree);
+      userData.append("grade", formData.grade);
+      userData.append("startDate", formData.startDate);
+      userData.append("endDate", formData.endDate);
+  
+      // Send the request to update both user and skill data
+      await axios.put(`/user/update/${userId}`, userData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data", // Ensures file uploads work
         },
       });
-
-      // Update Skills
-      const skillData = {
-        linkedin: formData.linkedin,
-        github: formData.github,
-        portfolio: formData.portfolio,
-        education: {
-          institution: formData.institution,
-          degree: formData.degree,
-          grade: formData.grade,
-          
-        },
-      };
-
-      await axios.put(`/skill/update/${userId}`, skillData);
-
-      alert("Profile updated successfully!");
+  
+      alert("Profile and Skills updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Update failed. Please try again.");
     }
   };
+  
 
   return (
     <>

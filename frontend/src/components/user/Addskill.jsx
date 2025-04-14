@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import axios from "axios";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const skillOptions = ["React", "Node.js", "Express", "MongoDB", "Flask", "JPA", "Clustering", "Python",
   "Java",
@@ -105,8 +106,7 @@ const AddSkill = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [description, setDescription] = useState("");
-  const [profileImage, setProfileImage] = useState(null);
-  const [preview, setPreview] = useState(null);
+  
 
 
   const userId = localStorage.getItem("id");
@@ -137,6 +137,8 @@ const AddSkill = () => {
       alert("Please add at least one skill to submit form'");
       return;
     }
+   
+
     const userData = {
       userId,
       linkedin,
@@ -156,16 +158,45 @@ const AddSkill = () => {
 
     try {
       await axios.post("/addskill", userData);
-      alert("Profile saved successfully!");
+        toast.success("🎉 profie submited Successful!", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",
+          transition: Bounce,
+        });
       navigate("/homepage");
     } catch (error) {
       console.error("Error saving data:", error);
-      alert("Failed to save profile");
+      toast.error("Failed to save profile. Please try again!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+        transition: Bounce,
+      });
     }
   };
-
   return (
     <Container maxWidth="sm" sx={{ mt: 4, p: 3, bgcolor: "#f4f4f4", borderRadius: 2 }}>
+      <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition={Bounce}
+        />
       <Tabs value={tab} onChange={(e, newValue) => setTab(newValue)}>
         <Tab label="Registration" />
         <Tab label="Education" />

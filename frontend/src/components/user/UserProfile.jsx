@@ -64,10 +64,10 @@ const Profile = () => {
           <Grid container alignItems="center" spacing={2}>
             <Grid item xs={12} sm={4} md={3} textAlign="center">
               <Avatar
-                src={getAvatarUrl(detail.gender)}
+                src={detail.profile_image}
                 sx={{
-                  width: { xs: 90, sm: 110 },
-                  height: { xs: 90, sm: 110 },
+                  width: { xs: 110, sm: 140 },
+                  height: { xs: 110, sm: 140 },
                   margin: "auto",
                   border: "4px solid white",
                 }}

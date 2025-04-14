@@ -61,20 +61,20 @@ const Navbar = () => {
       console.error("Search error:", error);
     }
   };
-  useEffect(() => {
-    const fetchNotificationCount = async () => {
-      try {
-        const userId = localStorage.getItem("id"); // or use getLoggedUserId()
-        const res = await axios.get(`/api/notifications/${userId}`);
-        const unread = res.data.filter(n => !n.isRead).length;
-        setNotificationCount(unread);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchNotificationCount = async () => {
+  //     try {
+  //       const userId = localStorage.getItem("id"); // or use getLoggedUserId()
+  //       const res = await axios.get(`/api/notifications/${userId}`);
+  //       const unread = res.data.filter(n => !n.isRead).length;
+  //       setNotificationCount(unread);
+  //     } catch (error) {
+  //       console.error("Error fetching notifications:", error);
+  //     }
+  //   };
 
-    fetchNotificationCount();
-  }, []);
+  //   fetchNotificationCount();
+  // }, []);
 
 
   const handleProfileClick = (event) => setAnchorEl(event.currentTarget);
