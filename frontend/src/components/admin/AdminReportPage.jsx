@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
     Box, Typography, Paper, Table, TableBody, TableCell,
-    TableContainer, TableHead, TableRow, Button, CircularProgress
+    TableContainer, TableHead, TableRow, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar
 } from '@mui/material';
 import axios from 'axios';
 import AdminNavbar from './AdminNavbar';
@@ -12,6 +12,10 @@ const AdminReportsPage = () => {
     const [reports, setReports] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
+    const [openDialog, setOpenDialog] = useState(false);
+    const [reportToDelete, setReportToDelete] = useState(null);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
     const contentRef = useRef(null);
 
     useEffect(() => {
@@ -62,6 +66,34 @@ const AdminReportsPage = () => {
         }
     };
 
+    const handleDeleteClick = (reportId) => {
+        setReportToDelete(reportId);
+        setOpenDialog(true); // Open the confirmation dialog
+    };
+
+    const handleDeleteConfirm = async () => {
+        try {
+            await axios.delete(`/report/${reportToDelete}`);
+            setReports(reports.filter((report) => report._id !== reportToDelete));
+            setOpenDialog(false);
+            setSnackbarMessage('Report removed successfully.');
+            setOpenSnackbar(true); // Show success message
+        } catch (error) {
+            console.error('Error deleting report:', error);
+            setOpenDialog(false);
+            setSnackbarMessage('Failed to remove report.');
+            setOpenSnackbar(true); // Show error message
+        }
+    };
+
+    const handleDialogClose = () => {
+        setOpenDialog(false); // Close the confirmation dialog without doing anything
+    };
+
+    const handleSnackbarClose = () => {
+        setOpenSnackbar(false); // Close the Snackbar
+    };
+
     return (
         <>
             <AdminNavbar />
@@ -110,7 +142,7 @@ const AdminReportsPage = () => {
                                         <TableCell><strong>Reporter Email</strong></TableCell>
                                         <TableCell><strong>Reported User Email</strong></TableCell>
                                         <TableCell><strong>Reason</strong></TableCell>
-                                        <TableCell><strong>Status</strong></TableCell>
+                                        {/* <TableCell><strong>Status</strong></TableCell> */}
                                         <TableCell><strong>Actions</strong></TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -124,26 +156,17 @@ const AdminReportsPage = () => {
                                             <TableCell>{report.reporterId?.email || 'N/A'}</TableCell>
                                             <TableCell>{report.reportedUserId?.email || 'N/A'}</TableCell>
                                             <TableCell>{report.reason}</TableCell>
-                                            <TableCell>{report.status}</TableCell>
+                                            {/* <TableCell>{report.status}</TableCell> */}
                                             <TableCell>
-                                                <Button
-                                                    variant="contained"
-                                                    color="success"
-                                                    size="small"
-                                                    sx={{ mr: 1 }}
-                                                    onClick={() => handleResolve(report._id)}
-                                                    disabled={report.status !== 'pending'}
-                                                >
-                                                    Resolve
-                                                </Button>
+                                                
                                                 <Button
                                                     variant="outlined"
-                                                    color="error"
+                                                    color="secondary"
                                                     size="small"
-                                                    onClick={() => handleReject(report._id)}
-                                                    disabled={report.status !== 'pending'}
+                                                    sx={{ ml: 1 }}
+                                                    onClick={() => handleDeleteClick(report._id)}
                                                 >
-                                                    Reject
+                                                    Remove
                                                 </Button>
                                             </TableCell>
                                         </TableRow>
@@ -154,6 +177,30 @@ const AdminReportsPage = () => {
                     )}
                 </Paper>
             </Box>
+
+            {/* Confirmation Dialog */}
+            <Dialog open={openDialog} onClose={handleDialogClose}>
+                <DialogTitle>Are you sure?</DialogTitle>
+                <DialogContent>
+                    <p>Do you really want to remove this report?</p>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDialogClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleDeleteConfirm} color="secondary">
+                        Yes, Remove
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Snackbar for Success/Error Message */}
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={4000}
+                onClose={handleSnackbarClose}
+                message={snackbarMessage}
+            />
         </>
     );
 };

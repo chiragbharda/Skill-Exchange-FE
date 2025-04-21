@@ -39,7 +39,7 @@ function App() {
       
       <Route path="" element={<PrivateRoutes />}>
         <Route path="/profile" element={<UserProfile />} />
-        <Route path="/dashboard2" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/addskill" element={<AddSkill />} />
         <Route path="/updateprofile" element={<UpdateProfile />} />
         <Route path="/chat" element={<ChatPage/>} />
