@@ -5,6 +5,8 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import AdminNavbar from './AdminNavbar';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminReportsPage = () => {
     const [reports, setReports] = useState([]);
@@ -13,15 +15,12 @@ const AdminReportsPage = () => {
     const contentRef = useRef(null);
 
     useEffect(() => {
-        // Scroll to the main content when the page loads
         contentRef.current.scrollIntoView({ behavior: 'smooth' });
 
-        // Fetch all reports from backend
         const fetchReports = async () => {
             try {
-                const response = await axios.get('/allreport'); // Replace with the correct API endpoint
-                console.log(response); // Debugging log to ensure data structure
-                setReports(response.data.data); // Assuming the backend returns data in the 'data' field
+                const response = await axios.get('/allreport');
+                setReports(response.data.data);
             } catch (error) {
                 console.error('Error fetching reports:', error);
                 setErrorMessage('Error fetching reports. Please try again later.');
@@ -33,20 +32,50 @@ const AdminReportsPage = () => {
         fetchReports();
     }, []);
 
+    const handleResolve = async (reportId) => {
+        try {
+            await axios.put(`/report/${reportId}/resolve`);
+            setReports(prevReports =>
+                prevReports.map(report =>
+                    report._id === reportId ? { ...report, status: 'resolved' } : report
+                )
+            );
+            toast.success('Report resolved successfully!');
+        } catch (error) {
+            console.error('Error resolving report:', error);
+            toast.error('Failed to resolve the report.');
+        }
+    };
+
+    const handleReject = async (reportId) => {
+        try {
+            await axios.put(`/report/${reportId}/reject`);
+            setReports(prevReports =>
+                prevReports.map(report =>
+                    report._id === reportId ? { ...report, status: 'rejected' } : report
+                )
+            );
+            toast.info('Report rejected.');
+        } catch (error) {
+            console.error('Error rejecting report:', error);
+            toast.error('Failed to reject the report.');
+        }
+    };
+
     return (
         <>
             <AdminNavbar />
+            <ToastContainer position="top-right" autoClose={3000} />
             <Box
                 sx={{
-                    minHeight: reports.length > 0 ? 'auto' : '100vh', // Adjust height dynamically
+                    minHeight: reports.length > 0 ? 'auto' : '100vh',
                     background: 'linear-gradient(135deg, #ece9e6, #ffffff)',
                     padding: 3,
                     display: 'flex',
-                    justifyContent: reports.length > 0 ? 'flex-start' : 'center', // Center if no data
-                    alignItems: reports.length > 0 ? 'flex-start' : 'center',    // Center if no data
+                    justifyContent: reports.length > 0 ? 'flex-start' : 'center',
+                    alignItems: reports.length > 0 ? 'flex-start' : 'center',
                 }}
             >
-
                 <Box ref={contentRef} />
                 <Paper
                     elevation={5}
@@ -64,14 +93,12 @@ const AdminReportsPage = () => {
                         Admin: All Reports
                     </Typography>
 
-                    {/* Error Message */}
                     {errorMessage && (
                         <Typography color="error" variant="body2" sx={{ mb: 2, textAlign: 'center' }}>
                             {errorMessage}
                         </Typography>
                     )}
 
-                    {/* Loader */}
                     {isLoading ? (
                         <CircularProgress sx={{ margin: '0 auto', display: 'block' }} />
                     ) : (
@@ -104,6 +131,8 @@ const AdminReportsPage = () => {
                                                     color="success"
                                                     size="small"
                                                     sx={{ mr: 1 }}
+                                                    onClick={() => handleResolve(report._id)}
+                                                    disabled={report.status !== 'pending'}
                                                 >
                                                     Resolve
                                                 </Button>
@@ -111,6 +140,8 @@ const AdminReportsPage = () => {
                                                     variant="outlined"
                                                     color="error"
                                                     size="small"
+                                                    onClick={() => handleReject(report._id)}
+                                                    disabled={report.status !== 'pending'}
                                                 >
                                                     Reject
                                                 </Button>

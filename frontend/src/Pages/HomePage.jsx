@@ -95,9 +95,9 @@ const HomePage = () => {
       <Container sx={{ mt: 6 }} >
         <Grid container spacing={3} justifyContent="center" sx={{ mt: 6 }}>
           {details
-            .filter((detail) => detail.userId._id !== loggedInUserId)
+            .filter((detail) => detail?.userId?._id !== loggedInUserId)
             .filter((detail) =>
-              selectedSkill === "" || (detail.proficientSkills || []).includes(selectedSkill)
+              selectedSkill === "" || (detail?.proficientSkills || []).includes(selectedSkill)
             )
             .map((detail) => (
 
@@ -123,20 +123,20 @@ const HomePage = () => {
                 >
                   <Box sx={{ flexGrow: 1 }}>
                     <Avatar
-                      src={detail.userId.profile_image}
+                      src={detail?.userId?.profile_image}
                       sx={{ width: 90, height: 90, margin: "auto", border: "3px solid #3498DB" }}
                     />
 
                     <Typography variant="h6" sx={{ fontWeight: "bold", mt: 2 }}>
-                      {detail.userId.full_name || "User Name"} <Verified sx={{ color: "#3498DB", fontSize: 18 }} />
+                      {detail?.userId?.full_name || "User Name"} <Verified sx={{ color: "#3498DB", fontSize: 18 }} />
                     </Typography>
 
                     <Typography variant="body2" sx={{ color: "#555", mt: 1 }}>
-                      <Mail sx={{ fontSize: 16, verticalAlign: "middle", color: "#3498DB" }} /> {detail.userId.email}
+                      <Mail sx={{ fontSize: 16, verticalAlign: "middle", color: "#3498DB" }} /> {detail?.userId?.email}
                     </Typography>
 
                     <Typography variant="body2" sx={{ color: "#555", mt: 0.5 }}>
-                      <Phone sx={{ fontSize: 16, verticalAlign: "middle", color: "#27AE60" }} /> {detail.userId.phone}
+                      <Phone sx={{ fontSize: 16, verticalAlign: "middle", color: "#27AE60" }} /> {detail?.userId?.phone}
                     </Typography>
 
 

@@ -13,9 +13,11 @@ import {
   Alert,
 } from "@mui/material";
 import { Mail, Phone, LocationOn } from "@mui/icons-material";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/common/Navbar";
-import { useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Profile = () => {
   const { userId } = useParams();
@@ -30,16 +32,38 @@ const Profile = () => {
   const fetchProfile = async () => {
     setLoading(true);
     setError(false);
+
     try {
+      toast.info("Fetching profile...", {
+        position: "top-center",
+        autoClose: 1500,
+        theme: "dark",
+      });
+
       const res = await axios.get(`/skill/${userId}`);
       if (res.data.data.length > 0) {
         setProfile(res.data.data[0]);
+        toast.success("Profile loaded successfully!", {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "dark",
+        });
       } else {
         setProfile(null);
+        toast.warning("No profile found!", {
+          position: "top-center",
+          autoClose: 2500,
+          theme: "dark",
+        });
       }
     } catch (err) {
       console.error("Error fetching profile:", err);
       setError(true);
+      toast.error("Failed to load profile!", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "dark",
+      });
     } finally {
       setLoading(false);
     }
@@ -52,55 +76,69 @@ const Profile = () => {
   const connectHandler = async () => {
     try {
       setConnectLoading(true);
-  
       const senderId = localStorage.getItem("id");
       const receiverId = profile?.userId?._id;
-  
-      // Debugging IDs
-      console.log("Sender ID:", senderId);
-      console.log("Receiver ID:", receiverId);
-  
+
       if (!senderId || !receiverId) {
-        alert("Sender or Receiver ID is missing.");
+        toast.warning("Missing sender or receiver ID.", {
+          position: "top-center",
+          theme: "dark",
+        });
         return;
       }
-  
+
       const response = await axios.post("/request/create", {
         senderId,
         receiverId,
       });
-  
-      alert(response.data.message);
+
+      toast.success(response.data.message, {
+        position: "top-right",
+        autoClose: 2500,
+        theme: "dark",
+      });
     } catch (error) {
       console.error("Error connecting:", error);
-      alert("Connection failed. Please check the details and try again.");
+      toast.error("Connection failed. Try again later.", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "dark",
+      });
     } finally {
       setConnectLoading(false);
     }
   };
-  
 
   if (loading) {
     return (
-      <Typography sx={{ textAlign: "center", mt: 4 }}>
-        <CircularProgress />
-      </Typography>
+      <>
+        <Navbar />
+        <Typography sx={{ textAlign: "center", mt: 4 }}>
+          <CircularProgress />
+        </Typography>
+      </>
     );
   }
 
   if (error) {
     return (
-      <Alert severity="error" sx={{ textAlign: "center", mt: 4 }}>
-        Unable to fetch profile. Please try again later.
-      </Alert>
+      <>
+        <Navbar />
+        <Alert severity="error" sx={{ textAlign: "center", mt: 4 }}>
+          Unable to fetch profile. Please try again later.
+        </Alert>
+      </>
     );
   }
 
   if (!profile) {
     return (
-      <Typography sx={{ textAlign: "center", mt: 4 }}>
-        Profile not found.
-      </Typography>
+      <>
+        <Navbar />
+        <Typography sx={{ textAlign: "center", mt: 4 }}>
+          Profile not found.
+        </Typography>
+      </>
     );
   }
 
@@ -109,6 +147,7 @@ const Profile = () => {
   return (
     <>
       <Navbar />
+      <ToastContainer />
       <Container maxWidth="md" sx={{ mt: 3 }}>
         <Card
           sx={{
@@ -180,14 +219,14 @@ const Profile = () => {
         </Card>
 
         <Card sx={{ p: 3, mb: 3, borderRadius: 3 }}>
-          <Typography sx={{ mt: 1 }}>
+          <Typography sx={{ mt: 1, mb: 2 }}>
             {profile?.linkedin && (
-              <Link href={profile.linkedin} target="_blank" rel="noopener">
+              <Link href={profile.linkedin} target="_blank" rel="noopener" sx={{ mr: 2 }}>
                 LinkedIn
               </Link>
             )}
             {profile?.github && (
-              <Link href={profile.github} target="_blank" rel="noopener">
+              <Link href={profile.github} target="_blank" rel="noopener" sx={{ mr: 2 }}>
                 GitHub
               </Link>
             )}

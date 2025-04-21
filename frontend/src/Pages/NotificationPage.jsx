@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, Paper, Button } from "@mui/material";
-
+import Navbar from "../components/common/Navbar";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../common/Navbar";
 
 const NotificationPage = () => {
   const userId = localStorage.getItem("id");
@@ -26,7 +25,7 @@ const NotificationPage = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <Box p={3}>
         <Typography variant="h5" gutterBottom>
           Notifications

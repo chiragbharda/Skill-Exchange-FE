@@ -71,9 +71,9 @@ const Alluser = () => {
           <div key={user._id} className="col-12 col-md-6 col-lg-4 mb-4">
             <div className="card h-100 shadow-sm">
               <div className="card-body">
-                <h5 className="card-title">{user.userId.full_name}</h5>
-                <p><strong>Email:</strong> {user.userId.email}</p>
-                <p><strong>Phone:</strong> {user.userId.phone}</p>
+                <h5 className="card-title">{user?.userId?.full_name}</h5>
+                <p><strong>Email:</strong> {user?.userId?.email}</p>
+                <p><strong>Phone:</strong> {user?.userId?.phone}</p>
                 <p><strong>Specification:</strong> {user.specification}</p>
                 <p><strong>Proficient Skills:</strong> {user.proficientSkills?.join(", ")}</p>
                 <p><strong>Skills to Learn:</strong> {user.skillsToLearn?.join(", ")}</p>

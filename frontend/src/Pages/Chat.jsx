@@ -150,7 +150,7 @@ const ChatPage = () => {
             <List>
               {requests.map((req) => (
                 <Paper key={req._id} sx={{ backgroundColor: "#2c2c2c", p: 1, mb: 1 }}>
-                  <Typography variant="body1">{req.senderId.full_name}</Typography>
+                  <Typography variant="body1">{req?.senderId?.full_name}</Typography>
                   <Box mt={1} display="flex" gap={1}>
                     <Button
                       variant="contained"

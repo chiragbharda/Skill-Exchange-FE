@@ -23,7 +23,8 @@ import ChatPage from "./Pages/Chat";
 import Alluser from "./components/admin/Alluser";
 import ReportPage from "./Pages/ReportPgae";
 import AdminReportsPage from "./components/admin/AdminReportPage";
-// import UserNotification from "./components/layouts/NotificationPage";
+import NotFound from "./Pages/Notfound";
+import UserNotification from "./components/layouts/NotificationPage";
 
 
 
@@ -35,13 +36,14 @@ function App() {
     <Routes>
 
       <Route path="/" element={<LandingPage />} />
+      
       <Route path="" element={<PrivateRoutes />}>
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/dashboard2" element={<DashboardPage />} />
         <Route path="/addskill" element={<AddSkill />} />
         <Route path="/updateprofile" element={<UpdateProfile />} />
         <Route path="/chat" element={<ChatPage/>} />
-        {/* <Route path="/notification" element={<UserNotification/>}></Route> */}
+        <Route path="/notification" element={<UserNotification/>}></Route>
         <Route path="/navbar" element={<Navbar />} />
         {/* admin side */}
         <Route path="/admin" element={<AdminNavbar />} />
@@ -54,6 +56,7 @@ function App() {
         <Route path="/report/:userId" element={<ReportPage/>}></Route>
         <Route path="/profile/:userId" element={<Profile/>} />
         <Route path="/review/:userId" element={<ReviewPage/>} />
+        <Route path="*" element={<NotFound />} />
     {/* login and signup  */}
       </Route>
       <Route path="/signup" element={<Signup />}></Route>

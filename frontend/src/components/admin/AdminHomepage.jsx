@@ -13,7 +13,7 @@ const AdminDashboard = () => {
     axios
       .get("/allskill")  // Replace with the correct API endpoint
       .then((res) => {
-        console.log("Fetched stats data:", res.data.data);
+        // console.log("Fetched stats data:", res.data.data);
         setStats(res.data.data);
       })
       .catch((err) => {
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
             <Card sx={{ backgroundColor: orange[500], color: "white" }}>
               <CardContent>
                 <Typography variant="h6">Total Connections</Typography>
-                <Typography variant="h4">{stats.reduce((acc, user) => acc + (user.userId.connectedUsers ? user.userId.connectedUsers.length : 0), 0)}</Typography>
+                <Typography variant="h4">{stats.reduce((acc, user) => acc + (user?.userId?.connectedUsers ? user?.userId?.connectedUsers?.length : 0), 0)}</Typography>
               </CardContent>
             </Card>
           </Grid>

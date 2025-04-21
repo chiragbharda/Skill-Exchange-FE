@@ -70,11 +70,18 @@ export const ResetPassword = () => {
             </div>
 
             <div className="button-group">
-              <button type="button" className="back-button" onClick={() => navigate("/login")}>
-                Back to Login
-              </button>
+              
               <button type="submit" className="signup-button">
                 Reset Password
+              </button>
+              <button type="button" style={{
+                background: "none",
+                border: "none",
+                color: "lightblue",
+                cursor: "pointer",
+                textDecoration: "underline",
+              }} onClick={() => navigate("/login")}>
+                Back to Login
               </button>
             </div>
           </form>

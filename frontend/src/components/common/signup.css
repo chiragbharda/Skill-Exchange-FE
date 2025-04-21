@@ -28,6 +28,12 @@
   font-size: 1.8rem;
   color: white;
 }
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
 
 /* Form Styling */
 .form-group {
@@ -82,6 +88,24 @@
   text-decoration: underline;
   font-size: 0.9rem;
 }
+.already-registered {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-redirect-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.login-redirect-button:hover {
+  background-color: #0056b3;
+}
+
 
 .signup-link:hover, .forgot-password:hover {
   color: #0ea5e9;
